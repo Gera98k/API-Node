@@ -7,9 +7,13 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev:1": "nodemon index.js",
+    "dev:2": "node --watch servidor_express.js"
   },
   "devDependencies": {
     "nodemon": "^3.1.11"
+  },
+  "dependencies": {
+    "express": "5.2.1"
   }
 }
