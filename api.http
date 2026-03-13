@@ -1,3 +1,5 @@
+GET http://localhost:3000/peliculas
+
 GET http://localhost:1234/pokemon/ditto
 
 ### esto sera la separacion de request
