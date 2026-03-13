@@ -3,10 +3,7 @@ const peliculas = require('./peliculas.json');
 const app = express();
 app.disable('x-powered-by');
 
-app.get('/peliculas', (req, res) => {
-    res.json(peliculas);
-});
-
+//filtrar pelicula por id
 app.get('/peliculas/:id', (req, res) => {
     const { id } = req.params;
     const pelicula = peliculas.find(peli => 
@@ -17,6 +14,22 @@ app.get('/peliculas/:id', (req, res) => {
         return res.json(pelicula);
     }
     res.status(404).json({ message: 'pelicula no encontrada' });
+});
+
+//filtrar peliculas por genero
+app.get('/peliculas', (req, res) => {
+    const { genre } = req.query;
+    if(genre) {
+        console.log(genre);
+        const peliculasFiltradas = peliculas.filter(
+            peli => peli.genre.some(genero => genero.toLowerCase() === genre.toLowerCase())
+        );
+        return res.json(peliculasFiltradas);
+    }
+    if(!genre) {
+        return res.json(peliculas);
+    }
+    res.status(404).json({ message: 'error' });
 });
 
 const PORT = process.env.PORT ?? 3000;
