@@ -1,3 +1,19 @@
+## agregar pelicula con post
+POST http://localhost:3000/peliculas/
+Content-Type: application/json
+
+{
+    "title": "El hombre araña across the spiderverse",
+    "year": 2020,
+    "director": "marvel",
+    "duration": 200,
+    "poster": "https://www.google.com/imgres?q=Spider-Man%3A%20Across%20the%20Spider-Verse&imgurl=https%3A%2F%2Fmedia.es.wired.com%2Fphotos%2F647a13d588218b01bf4a1c5f%2F4%3A3%2Fw_1800%2Ch_1350%2Cc_limit%2FSpider-Man-Across-The-Spider-Verse-Monitor-Culture.jpg&imgrefurl=https%3A%2F%2Fes.wired.com%2Farticulos%2Fspider-man-across-the-spider-verse-tiene-todo-lo-que-le-falta-al-mcu&docid=XXycGNM1GCULdM&tbnid=nclHVafHEARsXM&vet=12ahUKEwi-xqmHu56TAxW6le4BHTcIGcQQnPAOegQIJxAB..i&w=1800&h=1350&hcb=2&ved=2ahUKEwi-xqmHu56TAxW6le4BHTcIGcQQnPAOegQIJxAB",
+    "genre": [
+        "Action",
+        "Science fiction"
+    ]
+}
+
 ### cargar un genero de peliculas
 GET http://localhost:3000/peliculas?genre=dramA
 
