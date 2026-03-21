@@ -1,7 +1,7 @@
 const express = require('express');
 const peliculas = require('./peliculas.json');
 const crypto = require('node:crypto');
-const { validarPeli } = require('./schemas/peliculas');
+const { validarPeli, validarPeliculaParcialmente } = require('./schemas/peliculas');
 const app = express();
 app.use(express.json()); // express.json() es el middleware de express para tratar datos y chunks de un POST
 app.disable('x-powered-by');
@@ -50,6 +50,32 @@ app.post('/peliculas', (req, res) => {
     
     peliculas.push(nuevaPeli);
     res.status(201).json(nuevaPeli);
+});
+
+
+//Actualizar pelicula
+app.patch('/peliculas/:id', (req, res) => {
+    const resultado = validarPeliculaParcialmente(req.body);
+
+    if(!resultado.success) {
+        return res.status(400).json({ error: JSON.parse(resultado.error.message) });
+    }
+
+    const { id } = req.params;
+    const indexPelicula = peliculas.findIndex(pelicula => pelicula.id === id);
+
+    if(indexPelicula === -1) {
+        return res.status(400).json({ message: 'Pelicula no encontrada' });
+    }
+
+    const actualizarPelicula = {
+        ... peliculas[indexPelicula],
+        ... resultado.data
+    }
+
+    peliculas[indexPelicula] = actualizarPelicula;
+
+    return res.json(actualizarPelicula);
 });
 
 const PORT = process.env.PORT ?? 3000;

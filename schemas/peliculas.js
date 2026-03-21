@@ -25,6 +25,11 @@ function validarPeli(input){
     return schemaPeli.safeParse(input);
 }
 
+function validarPeliculaParcialmente(input){
+    return schemaPeli.partial().safeParse(input);
+}
+
 module.exports = {
-    validarPeli
+    validarPeli,
+    validarPeliculaParcialmente
 }
