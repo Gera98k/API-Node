@@ -1,11 +1,13 @@
 const express = require('express');
 const peliculas = require('./peliculas.json');
 const crypto = require('node:crypto');
+const cors = require('cors');
 const { validarPeli, validarPeliculaParcialmente } = require('./schemas/peliculas');
 const app = express();
 app.use(express.json()); // express.json() es el middleware de express para tratar datos y chunks de un POST
 app.disable('x-powered-by');
-
+//implementar middleware para cors pero acepta todos los origenes por defecto
+app.use(cors());
 //origenes que el CORS aceptara
 const ORIGENES_ACEPTADOS = [
     'http://localhost:8080'
@@ -27,11 +29,11 @@ app.get('/peliculas/:id', (req, res) => {
 //filtrar peliculas por genero
 app.get('/peliculas', (req, res) => {
     //metodos simples como GET no necesitan el OPTIONS para hacer funcionar el CORS
-    const origen = req.header('origin');
+    // const origen = req.header('origin');
 
-    if(ORIGENES_ACEPTADOS.includes(origen) || !origen) {
-        res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
-    }
+    // if(ORIGENES_ACEPTADOS.includes(origen) || !origen) {
+    //     res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
+    // }
 
     const { genre } = req.query;
     if(genre) {
@@ -94,10 +96,10 @@ app.patch('/peliculas/:id', (req, res) => {
 
 //Eliminar pelicula por id
 app.delete('/peliculas/:id', (req, res) => {
-    const origen = req.header('origin');
-    if(ORIGENES_ACEPTADOS.includes(origen) || !origen) {
-        res.header('Access-Control-Allow-Origin', origen);
-    }
+    // const origen = req.header('origin');
+    // if(ORIGENES_ACEPTADOS.includes(origen) || !origen) {
+    //     res.header('Access-Control-Allow-Origin', origen);
+    // }
 
     const { id } = req.params;
     const indexPelicula = peliculas.findIndex(movie => movie.id === id );
@@ -113,14 +115,14 @@ app.delete('/peliculas/:id', (req, res) => {
 
 
 //metodos como DELETE necesitan pasarle options para el CORS
-app.options('/peliculas/:id', (req, res) => {
-    const origen = req.header('origin'); 
-    if(ORIGENES_ACEPTADOS.includes(origen) || !origen) {
-        res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
-        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
-    }
-    res.send(200);
-});
+// app.options('/peliculas/:id', (req, res) => {
+//     const origen = req.header('origin'); 
+//     if(ORIGENES_ACEPTADOS.includes(origen) || !origen) {
+//         res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
+//         res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+//     }
+//     res.send(200);
+// });
 
 const PORT = process.env.PORT ?? 3000;
 
