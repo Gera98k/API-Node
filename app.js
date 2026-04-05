@@ -1,10 +1,14 @@
-const express = require('express');
-const peliculas = require('./peliculas.json');
-const crypto = require('node:crypto');
-const cors = require('cors');
-const { validarPeli, validarPeliculaParcialmente } = require('./schemas/peliculas');
+import express, { json } from 'express';
+import { randomUUID } from 'node:crypto';
+import cors from 'cors';
+import { validarPeli, validarPeliculaParcialmente } from './schemas/peliculas.js';
+import peliculas from './peliculas.json' with { type: 'json' };
+// import fs from 'node:fs';
+// const peliculas = JSON.parse(fs.readFileSync('./peliculas.json', 'utf-8'));
+// import peliculas from './peliculas.json';
+
 const app = express();
-app.use(express.json()); // express.json() es el middleware de express para tratar datos y chunks de un POST
+app.use(json()); // express.json() es el middleware de express para tratar datos y chunks de un POST
 app.disable('x-powered-by');
 //implementar middleware para cors pero acepta todos los origenes por defecto
 app.use(cors());
@@ -60,7 +64,7 @@ app.post('/peliculas', (req, res) => {
     }
 
     const nuevaPeli = {
-        id: crypto.randomUUID(),
+        id: randomUUID(),
         ...resultado.data
     }
     

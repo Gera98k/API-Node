@@ -1,4 +1,4 @@
-const z = require('zod');
+import z from 'zod';
 
 const schemaPeli = z.object({
     title: z.string({
@@ -21,15 +21,10 @@ const schemaPeli = z.object({
     )
 });
 
-function validarPeli(input){
+export function validarPeli(input){
     return schemaPeli.safeParse(input);
 }
 
-function validarPeliculaParcialmente(input){
+export function validarPeliculaParcialmente(input){
     return schemaPeli.partial().safeParse(input);
-}
-
-module.exports = {
-    validarPeli,
-    validarPeliculaParcialmente
 }
