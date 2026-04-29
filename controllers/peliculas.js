@@ -1,4 +1,5 @@
-import { modeloPelicula } from '../models/movies.js';
+// import { modeloPelicula } from '../models/movies.js';
+import { modeloPelicula } from '../models/mysql/peliculas.js';
 import { validarPeli, validarPeliculaParcialmente } from '../schemas/peliculas.js';
 
 export class controladorPelicula {
