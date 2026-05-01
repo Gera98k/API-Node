@@ -1,21 +1,25 @@
-// import { modeloPelicula } from '../models/movies.js';
-import { modeloPelicula } from '../models/mysql/peliculas.js';
 import { validarPeli, validarPeliculaParcialmente } from '../schemas/peliculas.js';
 
 export class controladorPelicula {
-    static async consultaPorId(req, res) {
+
+    // Agregar el constructor para alamcenar en el estado de la clase el modelo a usar
+    constructor({ modeloPelicula }){
+        this.modeloPelicula = modeloPelicula;
+    }
+
+    consultaPorId = async(req, res)=>{ //Cada metodo debe adaptarse para que funcione con el estado del objeto con el que se instancio, es decir el parametro del modelo
         const { id } = req.params;
-        const pelicula = await modeloPelicula.obtenerPorId({ id });
+        const pelicula = await this.modeloPelicula.obtenerPorId({ id }); //Ahora debemos utilizar el modelo pasado en el constructor en la instancia del objeto de esta clase
         res.json(pelicula);
     }
 
-    static async consultarPorGenero (req, res){
+    consultarPorGenero = async(req, res)=>{
         const { genero } = req.query;
-        const peliculas = await modeloPelicula.obtenerUnGeneroOTodo({ genero });
+        const peliculas = await this.modeloPelicula.obtenerUnGeneroOTodo({ genero });
         res.json(peliculas);
     }
 
-    static async agregarPelicula(req, res){
+    agregarPelicula = async(req, res)=>{
     
         const resultado = validarPeli(req.body);
     
@@ -23,11 +27,11 @@ export class controladorPelicula {
             return res.status(400).json({ error: JSON.parse(resultado.error.message)});
         }
     
-        const nuevaPeli = await modeloPelicula.agregarPeli(resultado.data);
+        const nuevaPeli = await this.modeloPelicula.agregarPeli(resultado.data);
         res.status(201).json(nuevaPeli);
     }
 
-    static async actualizacionDePeli(req, res){
+    actualizacionDePeli = async(req, res)=>{
         const resultado = validarPeliculaParcialmente(req.body);
         if(!resultado.success) {
             return res.status(400).json({ error: JSON.parse(resultado.error.message) });
@@ -35,15 +39,15 @@ export class controladorPelicula {
     
         const { id } = req.params;
     
-        const peliculaActualizada = await modeloPelicula.actualizarPelicula({ id, input: resultado.data });
+        const peliculaActualizada = await this.modeloPelicula.actualizarPelicula({ id, input: resultado.data });
         return res.json(peliculaActualizada);
     }
 
-    static async eliminarPelicula(req, res){
+    eliminarPelicula = async(req, res)=>{
 
         const { id } = req.params;
 
-        const peliculaEliminada = await modeloPelicula.eliminarPelicula({ id });
+        const peliculaEliminada = await this.modeloPelicula.eliminarPelicula({ id });
 
         if(peliculaEliminada === false){
             return res.status(401).json({ message: 'Pelicula no encontrada' });
